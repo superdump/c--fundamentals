@@ -22,6 +22,6 @@ using namespace std;
 
 int main() {
     auto g = WeightedGraph();
-    g.generate(5, 1.0, 10);
+    g.generate(10, 0.2, 10);
     cout << g;
 }
