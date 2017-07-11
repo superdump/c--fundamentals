@@ -60,6 +60,7 @@ void WeightedGraph::generate(int n, double density, int maxWeight) {
 ostream& operator<<(ostream& out, const WeightedGraph& g) {
     for (const auto& node: g.nodes) {
         out << *node.get();
+        out << endl;
     }
     return out;
 }
