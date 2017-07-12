@@ -22,6 +22,9 @@ using namespace std;
 
 int main() {
     auto g = WeightedGraph();
-    g.generate(10, 0.2, 10);
-    cout << g;
+    g.generate(5, 0.2, 10);
+    cout << "Graph is:" << endl << g << endl;
+
+    auto isConnected = g.isConnected();
+    cout << "Graph isConnected: " << isConnected << endl;
 }

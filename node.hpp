@@ -23,8 +23,8 @@
 using namespace std;
 
 class WeightedNode {
-    unordered_map<WeightedNode*, int> edges;
 public:
+    unordered_map<WeightedNode*, int> edges;
     int value;
     WeightedNode():edges(),value(0) {}
     WeightedNode(int v = 0):edges(),value(v) {}

@@ -21,6 +21,7 @@
 #include <iostream>
 #include <memory>
 #include <random>
+#include <unordered_set>
 
 using namespace std;
 
@@ -55,6 +56,41 @@ void WeightedGraph::generate(int n, double density, int maxWeight) {
             }
         }
     }
+}
+
+ostream& operator<<(ostream& out, const unordered_set<WeightedNode*> nodes) {
+    for (const auto node: nodes) {
+        out << *node << endl;
+    }
+    return out;
+}
+
+// WeightedGraph::isConnected checks whether all nodes in the graph have a path
+// to each other or not
+bool WeightedGraph::isConnected() {
+    unordered_set<WeightedNode*> open;
+    unordered_set<WeightedNode*> closed = {nodes[0].get()};
+
+    for (const auto edge: nodes[0]->edges) {
+        if (closed.find(edge.first) == closed.end()) {
+            open.insert(edge.first);
+        }
+    }
+
+    while (open.size() > 0) {
+        auto node = *open.begin();
+
+        closed.insert(node);
+        open.erase(node);
+
+        for (const auto edge: node->edges) {
+            if (closed.find(edge.first) == closed.end() && open.find(edge.first) == open.end()) {
+                open.insert(edge.first);
+            }
+        }
+    }
+
+    return nodes.size() == closed.size();
 }
 
 ostream& operator<<(ostream& out, const WeightedGraph& g) {

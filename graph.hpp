@@ -30,6 +30,7 @@ class WeightedGraph {
 public:
     WeightedGraph():nodes(0) {}
     void generate(int n, double density, int maxWeight = 100);
+    bool isConnected();
     friend ostream& operator<<(ostream& out, const WeightedGraph& g);
 };
 
