@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <memory>
+#include <queue>
 #include <random>
 #include <unordered_set>
 
@@ -91,6 +92,67 @@ bool WeightedGraph::isConnected() {
     }
 
     return nodes.size() == closed.size();
+}
+
+class EdgeComparator {
+public:
+    bool operator()(tuple<shared_ptr<TreeNode>, WeightedNode*, int>& lhs, tuple<shared_ptr<TreeNode>, WeightedNode*, int>& rhs) const {
+        return get<2>(lhs) > get<2>(rhs);
+    }
+};
+
+shared_ptr<TreeNode> WeightedGraph::MSTPrim() {
+    priority_queue<tuple<shared_ptr<TreeNode>, WeightedNode*, int>, vector<tuple<shared_ptr<TreeNode>, WeightedNode*, int> >, EdgeComparator> open;
+    // closed set for fast checking of whether node is in tree
+    unordered_set<WeightedNode*> closed = {nodes[0].get()};
+    // tree for result
+    shared_ptr<TreeNode> root = make_shared<TreeNode>(nodes[0]->value);
+    int total = 0;
+
+    for (const auto edge: nodes[0]->edges) {
+        if (closed.find(edge.first) == closed.end()) {
+            cout << "Pushing to open: (" << root->value << ", " << edge.first->value << ") : " << edge.second << endl;
+            open.push(make_tuple(root, edge.first, edge.second));
+        }
+    }
+
+    while (closed.size() < nodes.size() && open.empty() == false) {
+        // take the smallest edge from the priority queue
+        auto edge = open.top();
+        open.pop();
+        cout << "Popped from open: (" << get<0>(edge)->value << ", " << get<1>(edge)->value << ") : " << get<2>(edge) << endl;
+
+        auto dst = get<1>(edge);
+        // if the edge is in the tree, skip it
+        if (closed.find(dst) != closed.end()) {
+            cout << "Destination is in tree, skipping." << endl;
+            continue;
+        }
+        cout << "Adding (" << get<0>(edge)->value << ", " << get<1>(edge)->value << ") to tree" << endl;
+        // else insert it into the closed set
+        closed.insert(dst);
+        // and add it as a child of the appropriate parent node
+        auto src = get<0>(edge);
+        auto newNode = make_shared<TreeNode>(dst->value);
+        src->addChild(newNode);
+        total += get<2>(edge);
+
+        // add the destination node's edges to the priority queue if they are not in the closed set
+        for (const auto edge: dst->edges) {
+            if (closed.find(edge.first) == closed.end()) {
+                cout << "Pushing to open: (" << newNode->value << ", " << edge.first->value << ") : " << edge.second << endl;
+                open.push(make_tuple(newNode, edge.first, edge.second));
+            }
+        }
+    }
+
+    if (nodes.size() != closed.size()) {
+        cout << "No MST" << endl;
+        return nullptr;
+    }
+    cout << "MST total: " << total << endl;
+
+    return root;
 }
 
 ostream& operator<<(ostream& out, const WeightedGraph& g) {
