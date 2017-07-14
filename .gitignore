@@ -1,3 +1,4 @@
 *.o
-graph
+test_graph
+test_mst
 week1
