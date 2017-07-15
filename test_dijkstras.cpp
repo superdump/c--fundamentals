@@ -14,28 +14,23 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+#include "graph.hpp"
 
-#ifndef __GRAPH_HPP_INCLUDE__
-#define __GRAPH_HPP_INCLUDE__
-
-#include "node.hpp"
-
-#include "tree.hpp"
-
-#include <memory>
-#include <vector>
+#include <iostream>
 
 using namespace std;
 
-class WeightedGraph {
-    vector<unique_ptr<WeightedNode> > nodes;
-public:
-    WeightedGraph():nodes(0) {}
-    friend ostream& operator<<(ostream& out, const WeightedGraph& g);
-    void generate(int n, double density, int maxWeight = 100);
-    bool isConnected();
-    int dijkstrasShortestPath(const int a, const int b);
-    shared_ptr<TreeNode> MSTPrim();
-};
+int main() {
+    auto g = WeightedGraph();
 
-#endif // __GRAPH_HPP_INCLUDE__
+    bool isConnected = false;
+    while (!isConnected) {
+        g.generate(5, 0.2, 10);
+        isConnected = g.isConnected();
+    }
+
+    cout << "Graph is:" << endl << g << endl;
+
+    auto pathLength = g.dijkstrasShortestPath(0, 4);
+    cout << "Shortest path:" << pathLength << endl;
+}

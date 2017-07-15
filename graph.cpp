@@ -101,6 +101,65 @@ public:
     }
 };
 
+int WeightedGraph::dijkstrasShortestPath(const int a, const int b) {
+    if (a < 0 || a >= nodes.size() || b < 0 || b >= nodes.size()) {
+        return -1;
+    }
+    if (a == b) {
+        return 0;
+    }
+
+    priority_queue<tuple<shared_ptr<TreeNode>, WeightedNode*, int>, vector<tuple<shared_ptr<TreeNode>, WeightedNode*, int> >, EdgeComparator> open;
+    unordered_map<WeightedNode*, int> closed = {{nodes[a].get(), 0}};
+    shared_ptr<TreeNode> root = make_shared<TreeNode>(nodes[a]->value);
+
+    for (const auto edge: nodes[a]->edges) {
+        if (closed.find(edge.first) == closed.end()) {
+            cout << "Pushing to open: (" << root->value << ", " << edge.first->value << ") : " << edge.second << endl;
+            open.push(make_tuple(root, edge.first, edge.second));
+        }
+    }
+
+    while (open.empty() == false) {
+        // take the smallest edge from the priority queue
+        auto edge = open.top();
+        open.pop();
+        auto src = get<0>(edge);
+        auto dst = get<1>(edge);
+        auto pathLength = get<2>(edge);
+        cout << "Popped from open: (" << src->value << ", " << dst->value << ") : " << pathLength << endl;
+
+        cout << "Adding (" << src->value << ", " << dst->value << ") to paths tree" << endl;
+        auto newNode = make_shared<TreeNode>(dst->value);
+        src->addChild(newNode);
+
+        // if the destination is b, we're done
+        if (dst->value == b) {
+            cout << "Path from " << a << " to " << b << " found:" << endl;
+            cout << root << endl;
+            return pathLength;
+        }
+
+        closed.insert({dst, pathLength});
+
+        // add the destination node's edges to the priority queue if they are not in the closed set
+        for (const auto edge: dst->edges) {
+            if (closed.find(edge.first) == closed.end()) {
+                auto newPathLength = pathLength + edge.second;
+                // if not in open set or path is shorter than path in open set then insert into open set
+                // NOTE: if the path length is shorter than other paths to the node then this path will have higher priority
+                // this means that space is wasted in the priority_queue for worse paths but there doesn't seem to be a way around this
+                // without implementing our own data structures
+                cout << "Pushing to open: (" << newNode->value << ", " << edge.first->value << ") : " << newPathLength << endl;
+                open.push(make_tuple(newNode, edge.first, newPathLength));
+            }
+        }
+    }
+
+    cout << "No path from " << a << " to " << b << endl;
+    return -1;
+}
+
 shared_ptr<TreeNode> WeightedGraph::MSTPrim() {
     priority_queue<tuple<shared_ptr<TreeNode>, WeightedNode*, int>, vector<tuple<shared_ptr<TreeNode>, WeightedNode*, int> >, EdgeComparator> open;
     // closed set for fast checking of whether node is in tree

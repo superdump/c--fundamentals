@@ -1,4 +1,5 @@
 *.o
+test_dijkstras
 test_graph
 test_mst
 week1

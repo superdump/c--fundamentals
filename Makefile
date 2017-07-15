@@ -1,6 +1,7 @@
 CXXFLAGS = -std=c++11 -Wall
 
 TEST_BIN = \
+	test_dijkstras \
 	test_graph \
 	test_mst \
 	week1
@@ -28,6 +29,14 @@ TEST_MST_OBJS = \
 
 test_mst: test_mst.cpp $(TEST_MST_OBJS)
 	clang++ -o test_mst test_mst.cpp $(TEST_MST_OBJS) $(CXXFLAGS)
+
+TEST_DIJKSTRAS_OBJS = \
+	node.o \
+	graph.o \
+	tree.o
+
+test_dijkstras: test_dijkstras.cpp $(TEST_DIJKSTRAS_OBJS)
+	clang++ -o test_dijkstras test_dijkstras.cpp $(TEST_DIJKSTRAS_OBJS) $(CXXFLAGS)
 
 
 week1:
