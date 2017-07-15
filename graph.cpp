@@ -110,7 +110,7 @@ int WeightedGraph::dijkstrasShortestPath(const int a, const int b) {
     }
 
     priority_queue<tuple<shared_ptr<TreeNode>, WeightedNode*, int>, vector<tuple<shared_ptr<TreeNode>, WeightedNode*, int> >, EdgeComparator> open;
-    unordered_map<WeightedNode*, int> closed = {{nodes[a].get(), 0}};
+    unordered_set<WeightedNode*> closed = {nodes[a].get()};
     shared_ptr<TreeNode> root = make_shared<TreeNode>(nodes[a]->value);
 
     for (const auto edge: nodes[a]->edges) {
@@ -140,7 +140,7 @@ int WeightedGraph::dijkstrasShortestPath(const int a, const int b) {
             return pathLength;
         }
 
-        closed.insert({dst, pathLength});
+        closed.insert(dst);
 
         // add the destination node's edges to the priority queue if they are not in the closed set
         for (const auto edge: dst->edges) {
