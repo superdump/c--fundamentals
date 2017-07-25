@@ -1,5 +1,4 @@
 *.o
-test_dijkstras
-test_graph
-test_mst
+test_*
+!test_*.*
 week1
