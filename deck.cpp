@@ -28,6 +28,7 @@ std::ostream& operator<<(std::ostream& out, const Deck& deck) {
 }
 
 void Deck::shuffle() {
+    // Fisher-Yates (Durstenfield/Knuth variant)
     std::random_device rd;
     std::mt19937 rng(rd());
 
