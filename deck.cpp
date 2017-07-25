@@ -31,7 +31,7 @@ void Deck::shuffle() {
     std::random_device rd;
     std::mt19937 rng(rd());
 
-    for (int i = 0; i < deck.size() - 2; i++) {
+    for (int i = 0; i < deck.size() - 1; i--) {
         std::uniform_int_distribution<int> randomIndex(i, deck.size() - 1);
         int j = randomIndex(rng);
         std::swap(deck[i], deck[j]);
