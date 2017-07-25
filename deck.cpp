@@ -18,6 +18,7 @@
 
 #include <random>
 #include <utility>
+#include <vector>
 
 std::ostream& operator<<(std::ostream& out, const Deck& deck) {
     for (auto card : deck.deck) {
@@ -37,4 +38,14 @@ void Deck::shuffle() {
         int j = randomIndex(rng);
         std::swap(deck[i], deck[j]);
     }
+}
+
+std::vector<Card> Deck::get_top_k(int k) const {
+    std::vector<Card> cards;
+    if (k > 0) {
+        for (int i = 0; i < k; i++) {
+            cards.push_back(deck[i]);
+        }
+    }
+    return cards;
 }

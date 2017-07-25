@@ -18,13 +18,38 @@
 #include <iostream>
 
 #include "deck.hpp"
+#include "hand.hpp"
 
 int main() {
     auto deck = Deck();
-
     std::cout << deck;
-
     deck.shuffle();
-
     std::cout << deck;
+
+    int num_iterations;
+    std::cout << "How many iterations should be run? ";
+    std::cin >> num_iterations;
+
+    int flushes = 0, straights = 0, straight_flushes = 0;
+    for (int i = 0; i < num_iterations; i++) {
+        deck.shuffle();
+        Hand hand(deck.get_top_k(5));
+        bool is_flush = hand.is_flush();
+        if (is_flush) {
+            flushes++;
+        }
+        bool is_straight = hand.is_straight();
+        if (is_straight) {
+            straights++;
+        }
+        if (is_flush && is_straight) {
+            straight_flushes++;
+        }
+    }
+
+    std::cout << "Flushes: " << flushes << "/" << num_iterations << std::endl;
+    std::cout << "Straights: " << straights << "/" << num_iterations
+        << std::endl;
+    std::cout << "Straight flushes: " << straight_flushes << "/"
+        << num_iterations << std::endl;
 }

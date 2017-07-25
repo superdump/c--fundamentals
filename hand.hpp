@@ -25,6 +25,7 @@
 class Hand {
  public:
     Hand() : hand() {}
+    explicit Hand(std::vector<Card> cards) : hand(cards) {}
     friend std::ostream& operator<<(std::ostream& out, const Hand& hand);
     bool is_flush() const;
     bool is_straight() const;

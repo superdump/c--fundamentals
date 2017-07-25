@@ -39,6 +39,7 @@ class Deck {
     }
     friend std::ostream& operator<<(std::ostream& out, const Deck& deck);
     void shuffle();
+    std::vector<Card> get_top_k(int k) const;
  private:
     std::vector<Card> deck;
 };
