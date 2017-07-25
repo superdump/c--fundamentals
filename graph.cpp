@@ -16,15 +16,15 @@
 
 #include "graph.hpp"
 
-#include "node.hpp"
-
 #include <iostream>
 #include <memory>
 #include <queue>
 #include <random>
+#include <tuple>
 #include <unordered_set>
+#include <vector>
 
-using namespace std;
+#include "node.hpp"
 
 // WeightedGraph::generate (re)generates a graph of nodes with weighted edges
 // n is the number of nodes in the graph
@@ -35,18 +35,19 @@ void WeightedGraph::generate(int n, double density, int maxWeight) {
 
     for (int i = 0; i < n; ++i) {
         // C++14 - nodes.emplace_back(make_unique<WeightedNode>(i));
-        nodes.emplace_back(unique_ptr<WeightedNode>(new WeightedNode(i)));
+        nodes.emplace_back(std::unique_ptr<WeightedNode>(new WeightedNode(i)));
     }
 
-    random_device rd;
-    mt19937 rng(rd());
-    uniform_real_distribution<double> randomDouble(0.0, 1.0);
-    uniform_int_distribution<int> randomWeight(0, maxWeight);
-    for (const auto& nodeA: nodes) {
+    std::random_device rd;
+    std::mt19937 rng(rd());
+    std::uniform_real_distribution<double> randomDouble(0.0, 1.0);
+    std::uniform_int_distribution<int> randomWeight(0, maxWeight);
+    for (const auto& nodeA : nodes) {
         // add random edges with random weights to nodes according to density
-        for (const auto& nodeB: nodes) {
+        for (const auto& nodeB : nodes) {
             // No loops, no duplicates
-            if (nodeA == nodeB || nodeA->connected(nodeB.get()) || nodeB->connected(nodeA.get())) {
+            if (nodeA == nodeB || nodeA->connected(nodeB.get()) ||
+                    nodeB->connected(nodeA.get())) {
                 continue;
             }
             if (randomDouble(rng) < density) {
@@ -59,9 +60,10 @@ void WeightedGraph::generate(int n, double density, int maxWeight) {
     }
 }
 
-ostream& operator<<(ostream& out, const unordered_set<WeightedNode*> nodes) {
-    for (const auto node: nodes) {
-        out << *node << endl;
+std::ostream& operator<<(std::ostream& out,
+        const std::unordered_set<WeightedNode*> nodes) {
+    for (const auto node : nodes) {
+        out << *node << std::endl;
     }
     return out;
 }
@@ -69,10 +71,10 @@ ostream& operator<<(ostream& out, const unordered_set<WeightedNode*> nodes) {
 // WeightedGraph::isConnected checks whether all nodes in the graph have a path
 // to each other or not
 bool WeightedGraph::isConnected() {
-    unordered_set<WeightedNode*> open;
-    unordered_set<WeightedNode*> closed = {nodes[0].get()};
+    std::unordered_set<WeightedNode*> open;
+    std::unordered_set<WeightedNode*> closed = { nodes[0].get() };
 
-    for (const auto edge: nodes[0]->edges) {
+    for (const auto edge : nodes[0]->edges) {
         if (closed.find(edge.first) == closed.end()) {
             open.insert(edge.first);
         }
@@ -84,8 +86,9 @@ bool WeightedGraph::isConnected() {
         closed.insert(node);
         open.erase(node);
 
-        for (const auto edge: node->edges) {
-            if (closed.find(edge.first) == closed.end() && open.find(edge.first) == open.end()) {
+        for (const auto edge : node->edges) {
+            if (closed.find(edge.first) == closed.end() &&
+                    open.find(edge.first) == open.end()) {
                 open.insert(edge.first);
             }
         }
@@ -95,9 +98,12 @@ bool WeightedGraph::isConnected() {
 }
 
 class EdgeComparator {
-public:
-    bool operator()(tuple<shared_ptr<TreeNode>, WeightedNode*, int>& lhs, tuple<shared_ptr<TreeNode>, WeightedNode*, int>& rhs) const {
-        return get<2>(lhs) > get<2>(rhs);
+ public:
+    bool operator()(
+        const std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int>& lhs,
+        const std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int>& rhs)
+        const {
+        return std::get<2>(lhs) > std::get<2>(rhs);
     }
 };
 
@@ -109,14 +115,20 @@ int WeightedGraph::dijkstrasShortestPath(const int a, const int b) {
         return 0;
     }
 
-    priority_queue<tuple<shared_ptr<TreeNode>, WeightedNode*, int>, vector<tuple<shared_ptr<TreeNode>, WeightedNode*, int> >, EdgeComparator> open;
-    unordered_set<WeightedNode*> closed = {nodes[a].get()};
-    shared_ptr<TreeNode> root = make_shared<TreeNode>(nodes[a]->value);
+    std::priority_queue<
+        std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int>,
+        std::vector<std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int> >,
+        EdgeComparator> open;
 
-    for (const auto edge: nodes[a]->edges) {
+    std::unordered_set<WeightedNode*> closed = {nodes[a].get()};
+    std::shared_ptr<TreeNode> root =
+        std::make_shared<TreeNode>(nodes[a]->value);
+
+    for (const auto edge : nodes[a]->edges) {
         if (closed.find(edge.first) == closed.end()) {
-            cout << "Pushing to open: (" << root->value << ", " << edge.first->value << ") : " << edge.second << endl;
-            open.push(make_tuple(root, edge.first, edge.second));
+            std::cout << "Pushing to open: (" << root->value << ", "
+                << edge.first->value << ") : " << edge.second << std::endl;
+            open.push(std::make_tuple(root, edge.first, edge.second));
         }
     }
 
@@ -124,54 +136,67 @@ int WeightedGraph::dijkstrasShortestPath(const int a, const int b) {
         // take the smallest edge from the priority queue
         auto edge = open.top();
         open.pop();
-        auto src = get<0>(edge);
-        auto dst = get<1>(edge);
-        auto pathLength = get<2>(edge);
-        cout << "Popped from open: (" << src->value << ", " << dst->value << ") : " << pathLength << endl;
+        auto src = std::get<0>(edge);
+        auto dst = std::get<1>(edge);
+        auto pathLength = std::get<2>(edge);
+        std::cout << "Popped from open: (" << src->value << ", " << dst->value
+            << ") : " << pathLength << std::endl;
 
-        cout << "Adding (" << src->value << ", " << dst->value << ") to paths tree" << endl;
-        auto newNode = make_shared<TreeNode>(dst->value);
+        std::cout << "Adding (" << src->value << ", " << dst->value <<
+            ") to paths tree" << std::endl;
+        auto newNode = std::make_shared<TreeNode>(dst->value);
         src->addChild(newNode);
 
         // if the destination is b, we're done
         if (dst->value == b) {
-            cout << "Path from " << a << " to " << b << " found:" << endl;
-            cout << root << endl;
+            std::cout << "Path from " << a << " to " << b << " found:"
+                << std::endl;
+            std::cout << root << std::endl;
             return pathLength;
         }
 
         closed.insert(dst);
 
-        // add the destination node's edges to the priority queue if they are not in the closed set
-        for (const auto edge: dst->edges) {
+        // add the destination node's edges to the priority queue if they are
+        // not in the closed set
+        for (const auto edge : dst->edges) {
             if (closed.find(edge.first) == closed.end()) {
                 auto newPathLength = pathLength + edge.second;
-                // if not in open set or path is shorter than path in open set then insert into open set
-                // NOTE: if the path length is shorter than other paths to the node then this path will have higher priority
-                // this means that space is wasted in the priority_queue for worse paths but there doesn't seem to be a way around this
+                // if not in open set or path is shorter than path in open set
+                // then insert into open set
+                // NOTE: if the path length is shorter than other paths to the
+                // node then this path will have higher priority
+                // this means that space is wasted in the priority_queue for
+                // worse paths but there doesn't seem to be a way around this
                 // without implementing our own data structures
-                cout << "Pushing to open: (" << newNode->value << ", " << edge.first->value << ") : " << newPathLength << endl;
-                open.push(make_tuple(newNode, edge.first, newPathLength));
+                std::cout << "Pushing to open: (" << newNode->value << ", " <<
+                    edge.first->value << ") : " << newPathLength << std::endl;
+                open.push(std::make_tuple(newNode, edge.first, newPathLength));
             }
         }
     }
 
-    cout << "No path from " << a << " to " << b << endl;
+    std::cout << "No path from " << a << " to " << b << std::endl;
     return -1;
 }
 
-shared_ptr<TreeNode> WeightedGraph::MSTPrim() {
-    priority_queue<tuple<shared_ptr<TreeNode>, WeightedNode*, int>, vector<tuple<shared_ptr<TreeNode>, WeightedNode*, int> >, EdgeComparator> open;
+std::shared_ptr<TreeNode> WeightedGraph::MSTPrim() {
+    std::priority_queue<
+        std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int>,
+        std::vector<std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int> >,
+        EdgeComparator> open;
     // closed set for fast checking of whether node is in tree
-    unordered_set<WeightedNode*> closed = {nodes[0].get()};
+    std::unordered_set<WeightedNode*> closed = {nodes[0].get()};
     // tree for result
-    shared_ptr<TreeNode> root = make_shared<TreeNode>(nodes[0]->value);
+    std::shared_ptr<TreeNode> root =
+        std::make_shared<TreeNode>(nodes[0]->value);
     int total = 0;
 
-    for (const auto edge: nodes[0]->edges) {
+    for (const auto edge : nodes[0]->edges) {
         if (closed.find(edge.first) == closed.end()) {
-            cout << "Pushing to open: (" << root->value << ", " << edge.first->value << ") : " << edge.second << endl;
-            open.push(make_tuple(root, edge.first, edge.second));
+            std::cout << "Pushing to open: (" << root->value << ", " <<
+                edge.first->value << ") : " << edge.second << std::endl;
+            open.push(std::make_tuple(root, edge.first, edge.second));
         }
     }
 
@@ -179,45 +204,50 @@ shared_ptr<TreeNode> WeightedGraph::MSTPrim() {
         // take the smallest edge from the priority queue
         auto edge = open.top();
         open.pop();
-        cout << "Popped from open: (" << get<0>(edge)->value << ", " << get<1>(edge)->value << ") : " << get<2>(edge) << endl;
+        std::cout << "Popped from open: (" << std::get<0>(edge)->value << ", "
+            << std::get<1>(edge)->value << ") : " << std::get<2>(edge)
+            << std::endl;
 
-        auto dst = get<1>(edge);
+        auto dst = std::get<1>(edge);
         // if the edge is in the tree, skip it
         if (closed.find(dst) != closed.end()) {
-            cout << "Destination is in tree, skipping." << endl;
+            std::cout << "Destination is in tree, skipping." << std::endl;
             continue;
         }
-        cout << "Adding (" << get<0>(edge)->value << ", " << get<1>(edge)->value << ") to tree" << endl;
+        std::cout << "Adding (" << std::get<0>(edge)->value << ", " <<
+            std::get<1>(edge)->value << ") to tree" << std::endl;
         // else insert it into the closed set
         closed.insert(dst);
         // and add it as a child of the appropriate parent node
-        auto src = get<0>(edge);
-        auto newNode = make_shared<TreeNode>(dst->value);
+        auto src = std::get<0>(edge);
+        auto newNode = std::make_shared<TreeNode>(dst->value);
         src->addChild(newNode);
-        total += get<2>(edge);
+        total += std::get<2>(edge);
 
-        // add the destination node's edges to the priority queue if they are not in the closed set
-        for (const auto edge: dst->edges) {
+        // add the destination node's edges to the priority queue if they are
+        // not in the closed set
+        for (const auto edge : dst->edges) {
             if (closed.find(edge.first) == closed.end()) {
-                cout << "Pushing to open: (" << newNode->value << ", " << edge.first->value << ") : " << edge.second << endl;
-                open.push(make_tuple(newNode, edge.first, edge.second));
+                std::cout << "Pushing to open: (" << newNode->value << ", " <<
+                    edge.first->value << ") : " << edge.second << std::endl;
+                open.push(std::make_tuple(newNode, edge.first, edge.second));
             }
         }
     }
 
     if (nodes.size() != closed.size()) {
-        cout << "No MST" << endl;
+        std::cout << "No MST" << std::endl;
         return nullptr;
     }
-    cout << "MST total: " << total << endl;
+    std::cout << "MST total: " << total << std::endl;
 
     return root;
 }
 
-ostream& operator<<(ostream& out, const WeightedGraph& g) {
-    for (const auto& node: g.nodes) {
+std::ostream& operator<<(std::ostream& out, const WeightedGraph& g) {
+    for (const auto& node : g.nodes) {
         out << *node.get();
-        out << endl;
+        out << std::endl;
     }
     return out;
 }

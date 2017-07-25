@@ -18,20 +18,20 @@
 #ifndef __TREE_NODE_HPP_INCLUDE__
 #define __TREE_NODE_HPP_INCLUDE__
 
+#include <iostream>
 #include <memory>
 #include <unordered_set>
 
-using namespace std;
-
 class TreeNode {
-public:
-    unordered_set<shared_ptr<TreeNode> > children;
+ public:
+    std::unordered_set<std::shared_ptr<TreeNode> > children;
     int value;
     TreeNode():children(), value(0) {}
-    TreeNode(int v = 0):children(), value(v) {}
-    void addChild(shared_ptr<TreeNode> node);
-    bool hasChild(shared_ptr<TreeNode> node);
-    friend ostream& operator<<(ostream& out, const shared_ptr<TreeNode>& n);
+    explicit TreeNode(int v = 0) : children(), value(v) {}
+    void addChild(std::shared_ptr<TreeNode> node);
+    bool hasChild(std::shared_ptr<TreeNode> node);
+    friend std::ostream& operator<<(std::ostream& out,
+        const std::shared_ptr<TreeNode>& n);
 };
 
-#endif // __TREE_NODE_HPP_INCLUDE__
+#endif  // __TREE_NODE_HPP_INCLUDE__

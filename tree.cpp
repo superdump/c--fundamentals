@@ -17,22 +17,24 @@
 #include "tree.hpp"
 
 #include <iostream>
+#include <memory>
 
-void TreeNode::addChild(shared_ptr<TreeNode> node) {
+void TreeNode::addChild(std::shared_ptr<TreeNode> node) {
     children.insert(node);
 }
 
-bool TreeNode::hasChild(shared_ptr<TreeNode> node) {
+bool TreeNode::hasChild(std::shared_ptr<TreeNode> node) {
     return children.find(node) != children.end();
 }
 
-ostream& operator<<(ostream& out, const shared_ptr<TreeNode>& n) {
-    for (const auto& child: n->children) {
+std::ostream& operator<<(std::ostream& out,
+        const std::shared_ptr<TreeNode>& n) {
+    for (const auto& child : n->children) {
         out << "\t(" << n->value << ", " << child->value << ")";
         out << child;
     }
     if (n->children.empty()) {
-        out << endl;
+        out << std::endl;
     }
     return out;
 }

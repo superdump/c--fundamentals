@@ -18,24 +18,22 @@
 #ifndef __GRAPH_HPP_INCLUDE__
 #define __GRAPH_HPP_INCLUDE__
 
-#include "node.hpp"
-
-#include "tree.hpp"
-
 #include <memory>
 #include <vector>
 
-using namespace std;
+#include "node.hpp"
+#include "tree.hpp"
 
 class WeightedGraph {
-    vector<unique_ptr<WeightedNode> > nodes;
-public:
+ public:
     WeightedGraph():nodes(0) {}
-    friend ostream& operator<<(ostream& out, const WeightedGraph& g);
+    friend std::ostream& operator<<(std::ostream& out, const WeightedGraph& g);
     void generate(int n, double density, int maxWeight = 100);
     bool isConnected();
     int dijkstrasShortestPath(const int a, const int b);
-    shared_ptr<TreeNode> MSTPrim();
+    std::shared_ptr<TreeNode> MSTPrim();
+ private:
+    std::vector<std::unique_ptr<WeightedNode> > nodes;
 };
 
-#endif // __GRAPH_HPP_INCLUDE__
+#endif  // __GRAPH_HPP_INCLUDE__

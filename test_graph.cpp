@@ -14,17 +14,15 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "graph.hpp"
-
 #include <iostream>
 
-using namespace std;
+#include "graph.hpp"
 
 int main() {
     auto g = WeightedGraph();
     g.generate(5, 0.2, 10);
-    cout << "Graph is:" << endl << g << endl;
+    std::cout << "Graph is:" << std::endl << g << std::endl;
 
     auto isConnected = g.isConnected();
-    cout << "Graph isConnected: " << isConnected << endl;
+    std::cout << "Graph isConnected: " << isConnected << std::endl;
 }

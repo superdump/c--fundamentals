@@ -26,9 +26,10 @@ bool WeightedNode::connected(WeightedNode* node) {
     return edges.count(node) == 1;
 }
 
-ostream& operator<<(ostream& out, const WeightedNode& n) {
-    for (const auto& edge: n.edges) {
-        out << "\t(" << n.value << ", " << edge.first->value << "): " << edge.second;
+std::ostream& operator<<(std::ostream& out, const WeightedNode& n) {
+    for (const auto& edge : n.edges) {
+        out << "\t(" << n.value << ", " << edge.first->value << "): "
+            << edge.second;
     }
     return out;
 }

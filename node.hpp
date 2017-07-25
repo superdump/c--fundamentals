@@ -18,19 +18,18 @@
 #ifndef __NODE_HPP_INCLUDE__
 #define __NODE_HPP_INCLUDE__
 
+#include <iostream>
 #include <unordered_map>
 
-using namespace std;
-
 class WeightedNode {
-public:
-    unordered_map<WeightedNode*, int> edges;
+ public:
+    std::unordered_map<WeightedNode*, int> edges;
     int value;
-    WeightedNode():edges(),value(0) {}
-    WeightedNode(int v = 0):edges(),value(v) {}
+    WeightedNode() : edges(), value(0) {}
+    explicit WeightedNode(int v = 0) : edges(), value(v) {}
     void addEdge(WeightedNode* node, int weight);
     bool connected(WeightedNode* node);
-    friend ostream& operator<<(ostream& out, const WeightedNode& n);
+    friend std::ostream& operator<<(std::ostream& out, const WeightedNode& n);
 };
 
-#endif // __NODE_HPP_INCLUDE__
+#endif  // __NODE_HPP_INCLUDE__

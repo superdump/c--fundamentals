@@ -14,11 +14,10 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "graph.hpp"
 
 #include <iostream>
 
-using namespace std;
+#include "graph.hpp"
 
 int main() {
     auto g = WeightedGraph();
@@ -29,8 +28,8 @@ int main() {
         isConnected = g.isConnected();
     }
 
-    cout << "Graph is:" << endl << g << endl;
+    std::cout << "Graph is:" << std::endl << g << std::endl;
 
     auto tree = g.MSTPrim();
-    cout << "Prim MST:" << endl << tree << endl;
+    std::cout << "Prim MST:" << std::endl << tree << std::endl;
 }
