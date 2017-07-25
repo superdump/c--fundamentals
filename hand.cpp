@@ -68,3 +68,15 @@ bool Hand::is_straight() const {
 bool Hand::is_straight_flush() const {
     return is_flush() && is_straight();
 }
+
+bool Hand::is_4_of_a_kind() const {
+    int counts[13] = {0, };
+    for (auto card : hand) {
+        int pips = card.get_pips();
+        counts[pips]++;
+        if (counts[pips] == 4) {
+            return true;
+        }
+    }
+    return false;
+}

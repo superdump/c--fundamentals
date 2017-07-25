@@ -30,6 +30,7 @@ class Hand {
     bool is_flush() const;
     bool is_straight() const;
     bool is_straight_flush() const;
+    bool is_4_of_a_kind() const;
  private:
     std::vector<Card> hand;
 };

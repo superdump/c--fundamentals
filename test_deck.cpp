@@ -30,7 +30,7 @@ int main() {
     std::cout << "How many iterations should be run? ";
     std::cin >> num_iterations;
 
-    int flushes = 0, straights = 0, straight_flushes = 0;
+    int flushes = 0, straights = 0, straight_flushes = 0, four_of_a_kind = 0;
     for (int i = 0; i < num_iterations; i++) {
         deck.shuffle();
         Hand hand(deck.get_top_k(5));
@@ -45,11 +45,16 @@ int main() {
         if (is_flush && is_straight) {
             straight_flushes++;
         }
+        if (hand.is_4_of_a_kind()) {
+            four_of_a_kind++;
+        }
     }
 
     std::cout << "Flushes: " << flushes << "/" << num_iterations << std::endl;
     std::cout << "Straights: " << straights << "/" << num_iterations
         << std::endl;
     std::cout << "Straight flushes: " << straight_flushes << "/"
+        << num_iterations << std::endl;
+    std::cout << "4 of a kind: " << four_of_a_kind << "/"
         << num_iterations << std::endl;
 }
