@@ -97,8 +97,8 @@ bool WeightedGraph::isConnected() {
     return nodes.size() == closed.size();
 }
 
-typedef std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int>
-    WeightedEdgeTuple;
+using WeightedEdgeTuple =
+    std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int>;
 
 class WeightedEdgeComparator {
  public:
