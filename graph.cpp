@@ -97,12 +97,11 @@ bool WeightedGraph::isConnected() {
     return nodes.size() == closed.size();
 }
 
+typedef std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int> WeightedEdgeTuple;
+
 class EdgeComparator {
  public:
-    bool operator()(
-        const std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int>& lhs,
-        const std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int>& rhs)
-        const {
+    bool operator()(const WeightedEdgeTuple& lhs, const WeightedEdgeTuple& rhs) const {
         return std::get<2>(lhs) > std::get<2>(rhs);
     }
 };
@@ -115,11 +114,7 @@ int WeightedGraph::dijkstrasShortestPath(const int a, const int b) {
         return 0;
     }
 
-    std::priority_queue<
-        std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int>,
-        std::vector<std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int> >,
-        EdgeComparator> open;
-
+    std::priority_queue<WeightedEdgeTuple, std::vector<WeightedEdgeTuple>, EdgeComparator> open;
     std::unordered_set<WeightedNode*> closed = {nodes[a].get()};
     std::shared_ptr<TreeNode> root =
         std::make_shared<TreeNode>(nodes[a]->value);
@@ -181,10 +176,7 @@ int WeightedGraph::dijkstrasShortestPath(const int a, const int b) {
 }
 
 std::shared_ptr<TreeNode> WeightedGraph::MSTPrim() {
-    std::priority_queue<
-        std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int>,
-        std::vector<std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int> >,
-        EdgeComparator> open;
+    std::priority_queue<WeightedEdgeTuple, std::vector<WeightedEdgeTuple>, EdgeComparator> open;
     // closed set for fast checking of whether node is in tree
     std::unordered_set<WeightedNode*> closed = {nodes[0].get()};
     // tree for result
