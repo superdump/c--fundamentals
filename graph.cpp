@@ -97,11 +97,13 @@ bool WeightedGraph::isConnected() {
     return nodes.size() == closed.size();
 }
 
-typedef std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int> WeightedEdgeTuple;
+typedef std::tuple<std::shared_ptr<TreeNode>, WeightedNode*, int>
+    WeightedEdgeTuple;
 
 class WeightedEdgeComparator {
  public:
-    bool operator()(const WeightedEdgeTuple& lhs, const WeightedEdgeTuple& rhs) const {
+    bool operator()(const WeightedEdgeTuple& lhs, const WeightedEdgeTuple& rhs)
+            const {
         return std::get<2>(lhs) > std::get<2>(rhs);
     }
 };
