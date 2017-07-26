@@ -14,15 +14,25 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+#ifndef __HAND_H_INCLUDE__
+#define __HAND_H_INCLUDE__
+
 #include <iostream>
+#include <vector>
 
-#include "graph.hpp"
+#include "card.h"
 
-int main() {
-    auto g = WeightedGraph();
-    g.generate(5, 0.2, 10);
-    std::cout << "Graph is:" << std::endl << g << std::endl;
+class Hand {
+ public:
+    Hand() : hand() {}
+    explicit Hand(std::vector<Card> cards) : hand(cards) {}
+    friend std::ostream& operator<<(std::ostream& out, const Hand& hand);
+    bool is_flush() const;
+    bool is_straight() const;
+    bool is_straight_flush() const;
+    bool is_4_of_a_kind() const;
+ private:
+    std::vector<Card> hand;
+};
 
-    auto isConnected = g.isConnected();
-    std::cout << "Graph isConnected: " << isConnected << std::endl;
-}
+#endif  // __HAND_H_INCLUDE__

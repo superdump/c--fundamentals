@@ -14,11 +14,11 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "hand.hpp"
+#include "hand.h"
 
 #include <algorithm>
 
-#include "card.hpp"
+#include "card.h"
 
 std::ostream& operator<<(std::ostream& out, const Hand& hand) {
     for (auto card : hand.hand) {

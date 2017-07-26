@@ -14,27 +14,38 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "tree.hpp"
+#ifndef __CARD_H_INCLUDE__
+#define __CARD_H_INCLUDE__
 
+#include <cassert>
 #include <iostream>
-#include <memory>
 
-void TreeNode::addChild(std::shared_ptr<TreeNode> node) {
-    children.insert(node);
-}
+enum class Suit {
+    SPADES,
+    HEARTS,
+    DIAMONDS,
+    CLUBS
+};
 
-bool TreeNode::hasChild(std::shared_ptr<TreeNode> node) {
-    return children.find(node) != children.end();
-}
+class Pips {
+ public:
+    explicit Pips(int pips) : pips(pips) { assert(pips > 0 && pips < 14); }
+    friend std::ostream& operator<<(std::ostream& out, const Pips& pips);
+    int get_pips() const { return pips; }
+ private:
+    int pips;
+};
 
-std::ostream& operator<<(std::ostream& out,
-        const std::shared_ptr<TreeNode>& n) {
-    for (const auto& child : n->children) {
-        out << "\t(" << n->value << ", " << child->value << ")";
-        out << child;
-    }
-    if (n->children.empty()) {
-        out << std::endl;
-    }
-    return out;
-}
+class Card {
+ public:
+    Card() : suit(Suit::SPADES), pips(1) {}
+    Card(Suit suit, Pips pips) : suit(suit), pips(pips) {}
+    friend std::ostream& operator<<(std::ostream& out, const Card& card);
+    Suit get_suit() const { return suit; }
+    int get_pips() const { return pips.get_pips(); }
+ private:
+    Suit suit;
+    Pips pips;
+};
+
+#endif  // __CARD_H_INCLUDE__

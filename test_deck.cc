@@ -17,8 +17,8 @@
 
 #include <iostream>
 
-#include "deck.hpp"
-#include "hand.hpp"
+#include "deck.h"
+#include "hand.h"
 
 int main() {
     auto deck = Deck();

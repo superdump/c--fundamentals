@@ -14,34 +14,24 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef __DECK_HPP_INCLUDE__
-#define __DECK_HPP_INCLUDE__
+
+#ifndef __TREE_NODE_H_INCLUDE__
+#define __TREE_NODE_H_INCLUDE__
 
 #include <iostream>
-#include <vector>
+#include <memory>
+#include <unordered_set>
 
-#include "card.hpp"
-
-class Deck {
+class TreeNode {
  public:
-    Deck() : deck() {
-        const Suit suits[] = {
-            Suit::SPADES,
-            Suit::HEARTS,
-            Suit::DIAMONDS,
-            Suit::CLUBS
-        };
-        for (const auto& suit : suits) {
-            for (int i = 1; i < 14; i++) {
-                deck.emplace_back(suit, static_cast<Pips>(i));
-            }
-        }
-    }
-    friend std::ostream& operator<<(std::ostream& out, const Deck& deck);
-    void shuffle();
-    std::vector<Card> get_top_k(int k) const;
- private:
-    std::vector<Card> deck;
+    std::unordered_set<std::shared_ptr<TreeNode> > children;
+    int value;
+    TreeNode():children(), value(0) {}
+    explicit TreeNode(int v = 0) : children(), value(v) {}
+    void addChild(std::shared_ptr<TreeNode> node);
+    bool hasChild(std::shared_ptr<TreeNode> node);
+    friend std::ostream& operator<<(std::ostream& out,
+        const std::shared_ptr<TreeNode>& n);
 };
 
-#endif  // __DECK_HPP_INCLUDE__
+#endif  // __TREE_NODE_H_INCLUDE__

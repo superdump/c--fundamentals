@@ -14,25 +14,22 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef __HAND_HPP_INCLUDE__
-#define __HAND_HPP_INCLUDE__
+
+#ifndef __NODE_H_INCLUDE__
+#define __NODE_H_INCLUDE__
 
 #include <iostream>
-#include <vector>
+#include <unordered_map>
 
-#include "card.hpp"
-
-class Hand {
+class WeightedNode {
  public:
-    Hand() : hand() {}
-    explicit Hand(std::vector<Card> cards) : hand(cards) {}
-    friend std::ostream& operator<<(std::ostream& out, const Hand& hand);
-    bool is_flush() const;
-    bool is_straight() const;
-    bool is_straight_flush() const;
-    bool is_4_of_a_kind() const;
- private:
-    std::vector<Card> hand;
+    std::unordered_map<WeightedNode*, int> edges;
+    int value;
+    WeightedNode() : edges(), value(0) {}
+    explicit WeightedNode(int v = 0) : edges(), value(v) {}
+    void addEdge(WeightedNode* node, int weight);
+    bool connected(WeightedNode* node);
+    friend std::ostream& operator<<(std::ostream& out, const WeightedNode& n);
 };
 
-#endif  // __HAND_HPP_INCLUDE__
+#endif  // __NODE_H_INCLUDE__

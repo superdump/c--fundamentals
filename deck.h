@@ -14,38 +14,34 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#ifndef __CARD_HPP_INCLUDE__
-#define __CARD_HPP_INCLUDE__
+#ifndef __DECK_H_INCLUDE__
+#define __DECK_H_INCLUDE__
 
-#include <cassert>
 #include <iostream>
+#include <vector>
 
-enum class Suit {
-    SPADES,
-    HEARTS,
-    DIAMONDS,
-    CLUBS
-};
+#include "card.h"
 
-class Pips {
+class Deck {
  public:
-    explicit Pips(int pips) : pips(pips) { assert(pips > 0 && pips < 14); }
-    friend std::ostream& operator<<(std::ostream& out, const Pips& pips);
-    int get_pips() const { return pips; }
+    Deck() : deck() {
+        const Suit suits[] = {
+            Suit::SPADES,
+            Suit::HEARTS,
+            Suit::DIAMONDS,
+            Suit::CLUBS
+        };
+        for (const auto& suit : suits) {
+            for (int i = 1; i < 14; i++) {
+                deck.emplace_back(suit, static_cast<Pips>(i));
+            }
+        }
+    }
+    friend std::ostream& operator<<(std::ostream& out, const Deck& deck);
+    void shuffle();
+    std::vector<Card> get_top_k(int k) const;
  private:
-    int pips;
+    std::vector<Card> deck;
 };
 
-class Card {
- public:
-    Card() : suit(Suit::SPADES), pips(1) {}
-    Card(Suit suit, Pips pips) : suit(suit), pips(pips) {}
-    friend std::ostream& operator<<(std::ostream& out, const Card& card);
-    Suit get_suit() const { return suit; }
-    int get_pips() const { return pips.get_pips(); }
- private:
-    Suit suit;
-    Pips pips;
-};
-
-#endif  // __CARD_HPP_INCLUDE__
+#endif  // __DECK_H_INCLUDE__

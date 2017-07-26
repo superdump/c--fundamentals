@@ -14,7 +14,7 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "graph.hpp"
+#include "graph.h"
 
 #include <iostream>
 #include <memory>
@@ -24,7 +24,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include "node.hpp"
+#include "node.h"
 
 // WeightedGraph::generate (re)generates a graph of nodes with weighted edges
 // n is the number of nodes in the graph

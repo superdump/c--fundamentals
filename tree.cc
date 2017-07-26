@@ -14,22 +14,27 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+#include "tree.h"
 
 #include <iostream>
+#include <memory>
 
-#include "graph.hpp"
+void TreeNode::addChild(std::shared_ptr<TreeNode> node) {
+    children.insert(node);
+}
 
-int main() {
-    auto g = WeightedGraph();
+bool TreeNode::hasChild(std::shared_ptr<TreeNode> node) {
+    return children.find(node) != children.end();
+}
 
-    bool isConnected = false;
-    while (!isConnected) {
-        g.generate(5, 1.0, 10);
-        isConnected = g.isConnected();
+std::ostream& operator<<(std::ostream& out,
+        const std::shared_ptr<TreeNode>& n) {
+    for (const auto& child : n->children) {
+        out << "\t(" << n->value << ", " << child->value << ")";
+        out << child;
     }
-
-    std::cout << "Graph is:" << std::endl << g << std::endl;
-
-    auto tree = g.MSTPrim();
-    std::cout << "Prim MST:" << std::endl << tree << std::endl;
+    if (n->children.empty()) {
+        out << std::endl;
+    }
+    return out;
 }

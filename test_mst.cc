@@ -14,21 +14,22 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
+
 #include <iostream>
 
-#include "graph.hpp"
+#include "graph.h"
 
 int main() {
     auto g = WeightedGraph();
 
     bool isConnected = false;
     while (!isConnected) {
-        g.generate(5, 0.2, 10);
+        g.generate(5, 1.0, 10);
         isConnected = g.isConnected();
     }
 
     std::cout << "Graph is:" << std::endl << g << std::endl;
 
-    auto pathLength = g.dijkstrasShortestPath(0, 4);
-    std::cout << "Shortest path:" << pathLength << std::endl;
+    auto tree = g.MSTPrim();
+    std::cout << "Prim MST:" << std::endl << tree << std::endl;
 }

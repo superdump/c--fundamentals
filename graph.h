@@ -15,21 +15,25 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 
-#ifndef __NODE_HPP_INCLUDE__
-#define __NODE_HPP_INCLUDE__
+#ifndef __GRAPH_H_INCLUDE__
+#define __GRAPH_H_INCLUDE__
 
-#include <iostream>
-#include <unordered_map>
+#include <memory>
+#include <vector>
 
-class WeightedNode {
+#include "node.h"
+#include "tree.h"
+
+class WeightedGraph {
  public:
-    std::unordered_map<WeightedNode*, int> edges;
-    int value;
-    WeightedNode() : edges(), value(0) {}
-    explicit WeightedNode(int v = 0) : edges(), value(v) {}
-    void addEdge(WeightedNode* node, int weight);
-    bool connected(WeightedNode* node);
-    friend std::ostream& operator<<(std::ostream& out, const WeightedNode& n);
+    WeightedGraph():nodes(0) {}
+    friend std::ostream& operator<<(std::ostream& out, const WeightedGraph& g);
+    void generate(int n, double density, int maxWeight = 100);
+    bool isConnected();
+    int dijkstrasShortestPath(const int a, const int b);
+    std::shared_ptr<TreeNode> MSTPrim();
+ private:
+    std::vector<std::unique_ptr<WeightedNode> > nodes;
 };
 
-#endif  // __NODE_HPP_INCLUDE__
+#endif  // __GRAPH_H_INCLUDE__

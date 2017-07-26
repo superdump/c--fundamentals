@@ -14,7 +14,7 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-#include "card.hpp"
+#include "card.h"
 
 std::ostream& operator<<(std::ostream& out, const Suit& suit) {
     switch (suit) {

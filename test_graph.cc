@@ -14,24 +14,15 @@
 // OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 
-
-#ifndef __TREE_NODE_HPP_INCLUDE__
-#define __TREE_NODE_HPP_INCLUDE__
-
 #include <iostream>
-#include <memory>
-#include <unordered_set>
 
-class TreeNode {
- public:
-    std::unordered_set<std::shared_ptr<TreeNode> > children;
-    int value;
-    TreeNode():children(), value(0) {}
-    explicit TreeNode(int v = 0) : children(), value(v) {}
-    void addChild(std::shared_ptr<TreeNode> node);
-    bool hasChild(std::shared_ptr<TreeNode> node);
-    friend std::ostream& operator<<(std::ostream& out,
-        const std::shared_ptr<TreeNode>& n);
-};
+#include "graph.h"
 
-#endif  // __TREE_NODE_HPP_INCLUDE__
+int main() {
+    auto g = WeightedGraph();
+    g.generate(5, 0.2, 10);
+    std::cout << "Graph is:" << std::endl << g << std::endl;
+
+    auto isConnected = g.isConnected();
+    std::cout << "Graph isConnected: " << isConnected << std::endl;
+}
