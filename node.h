@@ -21,15 +21,36 @@
 #include <iostream>
 #include <unordered_map>
 
+template <class T>
 class WeightedNode {
  public:
-    std::unordered_map<WeightedNode*, int> edges;
-    int value;
-    WeightedNode() : edges(), value(0) {}
-    explicit WeightedNode(int v = 0) : edges(), value(v) {}
-    void addEdge(WeightedNode* node, int weight);
-    bool connected(WeightedNode* node);
-    friend std::ostream& operator<<(std::ostream& out, const WeightedNode& n);
+    explicit WeightedNode(T v) : value(v) {}
+    void addEdge(WeightedNode<T>* node, int weight = 1);
+    bool isConnected(WeightedNode<T>* node);
+    template <class U>
+    friend std::ostream& operator<<(std::ostream& out,
+        const WeightedNode<U>& n);
+    T value;
+    std::unordered_map<WeightedNode<T>*, int> edges;
 };
+
+template <class T>
+void WeightedNode<T>::addEdge(WeightedNode<T>* node, int weight) {
+    edges.insert({node, weight});
+}
+
+template <class T>
+bool WeightedNode<T>::isConnected(WeightedNode<T>* node) {
+    return edges.count(node) == 1;
+}
+
+template <class U>
+std::ostream& operator<<(std::ostream& out, const WeightedNode<U>& n) {
+    for (const auto& edge : n.edges) {
+        out << "\t(" << n.value << ", " << edge.first->value << "): "
+            << edge.second;
+    }
+    return out;
+}
 
 #endif  // __NODE_H_INCLUDE__

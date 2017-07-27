@@ -20,7 +20,7 @@
 #include "graph.h"
 
 int main() {
-    auto g = WeightedGraph();
+    auto g = WeightedGraph<int>();
 
     bool isConnected = false;
     while (!isConnected) {

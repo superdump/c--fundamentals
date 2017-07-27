@@ -15,21 +15,3 @@
 // PERFORMANCE OF THIS SOFTWARE.
 
 #include "node.h"
-
-#include <iostream>
-
-void WeightedNode::addEdge(WeightedNode* node, int weight) {
-    edges.insert({node, weight});
-}
-
-bool WeightedNode::connected(WeightedNode* node) {
-    return edges.count(node) == 1;
-}
-
-std::ostream& operator<<(std::ostream& out, const WeightedNode& n) {
-    for (const auto& edge : n.edges) {
-        out << "\t(" << n.value << ", " << edge.first->value << "): "
-            << edge.second;
-    }
-    return out;
-}

@@ -19,7 +19,7 @@
 #include "graph.h"
 
 int main() {
-    auto g = WeightedGraph();
+    auto g = WeightedGraph<int>();
     g.generate(5, 0.2, 10);
     std::cout << "Graph is:" << std::endl << g << std::endl;
 
