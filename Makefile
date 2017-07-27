@@ -14,30 +14,22 @@ all: $(TEST_BIN)
 	clang++ -c -o $@ $< $(CXXFLAGS)
 
 
-TEST_GRAPH_OBJS = \
+GRAPH_OBJS = \
 	node.o \
 	graph.o \
 	tree.o
 
-test_graph: test_graph.cc $(TEST_GRAPH_OBJS)
-	clang++ -o test_graph test_graph.cc $(TEST_GRAPH_OBJS) $(CXXFLAGS)
+test_graph: test_graph.cc $(GRAPH_OBJS)
+	clang++ -o test_graph test_graph.cc $(GRAPH_OBJS) $(CXXFLAGS)
 
 
-TEST_MST_OBJS = \
-	node.o \
-	graph.o \
-	tree.o
+test_mst: test_mst.cc $(GRAPH_OBJS)
+	clang++ -o test_mst test_mst.cc $(GRAPH_OBJS) $(CXXFLAGS)
 
-test_mst: test_mst.cc $(TEST_MST_OBJS)
-	clang++ -o test_mst test_mst.cc $(TEST_MST_OBJS) $(CXXFLAGS)
+test_dijkstras: test_dijkstras.cc $(GRAPH_OBJS)
+	clang++ -o test_dijkstras test_dijkstras.cc $(GRAPH_OBJS) $(CXXFLAGS)
 
-TEST_DIJKSTRAS_OBJS = \
-	node.o \
-	graph.o \
-	tree.o
 
-test_dijkstras: test_dijkstras.cc $(TEST_DIJKSTRAS_OBJS)
-	clang++ -o test_dijkstras test_dijkstras.cc $(TEST_DIJKSTRAS_OBJS) $(CXXFLAGS)
 
 CARD_OBJS = \
 	card.o \
