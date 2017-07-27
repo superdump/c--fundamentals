@@ -4,6 +4,7 @@ TEST_BIN = \
 	test_deck \
 	test_dijkstras \
 	test_graph \
+	test_hex \
 	test_mst \
 	week1
 
@@ -29,6 +30,12 @@ test_mst: test_mst.cc $(GRAPH_OBJS)
 test_dijkstras: test_dijkstras.cc $(GRAPH_OBJS)
 	clang++ -o test_dijkstras test_dijkstras.cc $(GRAPH_OBJS) $(CXXFLAGS)
 
+HEX_OBJS = \
+	$(GRAPH_OBJS) \
+	hex.o
+
+test_hex: test_hex.cc $(HEX_OBJS)
+	clang++ -o test_hex test_hex.cc $(HEX_OBJS) $(CXXFLAGS)
 
 
 CARD_OBJS = \
